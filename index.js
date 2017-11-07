@@ -1,5 +1,5 @@
 fs = require('fs'),
-PDFParser = require("pdf2json");
+  PDFParser = require("pdf2json");
 var http = require('http');
 var express = require('express')
 var app = express()
@@ -17,17 +17,33 @@ app.post('/', function (request, response) {
         console.error(errData.parserError)
       }
       );
-       pdfParser.on("pdfParser_dataReady", function (pdfData) {
-          var pdfAsText = pdfParser.getRawTextContent();
-          var splitted = pdfAsText.split(/\n/g);
-          var removed = [];
-          splitted.forEach(function(element) {
-            if(element != " \r")
-            {
-              removed.push(element.replace(" \r", ""));
-            }
-          }, this);
-          response.send(removed);
+      pdfParser.on("pdfParser_dataReady", function (pdfData) {
+        var pdfAsText = pdfParser.getRawTextContent();
+        var splitted = pdfAsText.split(/\n/g);
+        var menu = [];
+        splitted.forEach(function (element) {
+          if (element != " \r") {
+            menu.push(element.replace(" \r", ""));
+          }
+        }, this);
+
+        var todayAsNumber = new Date().getDay();
+        var today = "Sonntag";
+        if (todayAsNumber === 1) today = "Montag";
+        if (todayAsNumber === 2) today = "Dienstag";
+        if (todayAsNumber === 3) today = "Mittwoch";
+        if (todayAsNumber === 4) today = "Donnerstag";
+        if (todayAsNumber === 5) today = "Freitag";
+
+        var result = "Heute beim Tresor: \n";
+        menu.reduce((initvalue, currentValue, i, array) => {
+          if (currentValue === today) {
+            result += array[i + 1] + "\n";
+          }
+        });
+
+        result += menu[13] + "\n" + menu[14] + "\n" + menu[15];
+        response.send(result);
       });
       pdfParser.loadPDF("./WochenKarte2.pdf");
     })
