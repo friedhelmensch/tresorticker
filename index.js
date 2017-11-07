@@ -48,7 +48,6 @@ app.post('/', function (request, response) {
           }
         });
 
-        result += menu[13] + "\n" + menu[14] + "\n" + menu[15];
         response.send(result);
       });
       pdfParser.loadPDF("./WochenKarte2.pdf");
