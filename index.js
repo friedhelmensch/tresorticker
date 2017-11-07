@@ -9,7 +9,7 @@ app.use(express.static(__dirname + '/public'))
 
 app.get('/', function (request, response) {
   var file = fs.createWriteStream("./WochenKarte2.pdf");
-  var request = http.get("http://www.restaurant-tresor.de/index_htm_files/Wochenkarte.pdf", response, function (responsePdf) {
+  var request = http.get("http://www.restaurant-tresor.de/index_htm_files/Wochenkarte.pdf", function (responsePdf) {
     var stream = responsePdf.pipe(file);
     stream.on("finish", function () {
       var pdfParser = new PDFParser(this, 1);
@@ -17,7 +17,7 @@ app.get('/', function (request, response) {
         console.error(errData.parserError)
       }
       );
-      pdfParser.on("pdfParser_dataReady", reposnse, function(pdfData) {
+      pdfParser.on("pdfParser_dataReady", function(pdfData) {
         //console.log(pdfParser.getRawTextContent());
         response.send(pdfParser.getRawTextContent())
       });
