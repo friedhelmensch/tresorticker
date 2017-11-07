@@ -1,5 +1,5 @@
-fs = require('fs'),
-  PDFParser = require("pdf2json");
+fs = require('fs');
+PDFParser = require("pdf2json");
 var http = require('http');
 var express = require('express')
 var app = express()
@@ -37,18 +37,24 @@ app.post('/', function (request, response) {
 
         var result = "Heute beim Tresor: \n";
         menu.reduce((initvalue, currentValue, i, array) => {
-          if(currentValue === today) {
+          if (currentValue === today) {
             //let´s see what happens if they don´t have tagesmenu on a specific day.
-            result += array[i+1] + "\n";
+            result += array[i + 1] + "\n";
           }
-          if(currentValue === "Täglich")
-          {
+          if (currentValue === "Täglich") {
             //assuming there are always 3 tagesgerichte
-            result += array[i+1] + "\n" + menu[i+2] + "\n" + menu[i+3];
+            result += array[i + 1] + "\n" + menu[i + 2] + "\n" + menu[i + 3];
           }
         });
-
-        response.send(result);
+        response.setHeader('Content-Type', 'application/json');
+        /*response.send(JSON.stringify({
+          "response_type": "in_channel",
+          "text": result
+        }));*/
+        response.send(JSON.stringify({
+          "response_type": "in_channel",
+          "text": result
+        }));
       });
       pdfParser.loadPDF("./WochenKarte2.pdf");
     })
