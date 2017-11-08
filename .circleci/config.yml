@@ -1,5 +1,13 @@
-deployment:
-  production:
-    branch: master
-    heroku:
-      appname: tresorticker
+version: 2
+jobs:
+   build:
+     docker:
+       - image: circleci/node:7
+     steps:
+       - checkout
+       - run: echo "hello world"
+  deployment:
+    production:
+      branch: master
+      heroku:
+        appname: tresorticker
