@@ -43,7 +43,7 @@ app.post('/', function (request, response) {
           }
           if (currentValue === "Täglich") {
             //assuming there are always 3 tagesgerichte
-            result += array[i + 1] + "\n" + menu[i + 2] + "\n" + menu[i + 3] + "lölchen";
+            result += array[i + 1] + "\n" + menu[i + 2] + "\n" + menu[i + 3];
           }
         });
         response.setHeader('Content-Type', 'application/json');
