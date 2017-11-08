@@ -1,8 +1,9 @@
 fs = require('fs');
 PDFParser = require("pdf2json");
 var http = require('http');
-var express = require('express')
-var app = express()
+var express = require('express');
+var app = express();
+const extractString = require('./extractString');
 
 app.set('port', (process.env.PORT || 5000))
 app.use(express.static(__dirname + '/public'))
@@ -35,17 +36,7 @@ app.post('/', function (request, response) {
         if (todayAsNumber === 4) today = "Donnerstag";
         if (todayAsNumber === 5) today = "Freitag";
 
-        var result = "Heute beim Tresor: \n";
-        menu.reduce((initvalue, currentValue, i, array) => {
-          if (currentValue === today) {
-            //let´s see what happens if they don´t have tagesmenu on a specific day.
-            result += array[i + 1] + "\n";
-          }
-          if (currentValue === "Täglich") {
-            //assuming there are always 3 tagesgerichte
-            result += array[i + 1] + "\n" + menu[i + 2] + "\n" + menu[i + 3];
-          }
-        });
+        var result = extractString(menu, today) + "!!";
         response.setHeader('Content-Type', 'application/json');
         response.send(JSON.stringify({
           "response_type": "in_channel",
