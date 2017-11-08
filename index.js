@@ -43,14 +43,10 @@ app.post('/', function (request, response) {
           }
           if (currentValue === "Täglich") {
             //assuming there are always 3 tagesgerichte
-            result += array[i + 1] + "\n" + menu[i + 2] + "\n" + menu[i + 3];
+            result += array[i + 1] + "\n" + menu[i + 2] + "\n" + menu[i + 3] + "lölchen";
           }
         });
         response.setHeader('Content-Type', 'application/json');
-        /*response.send(JSON.stringify({
-          "response_type": "in_channel",
-          "text": result
-        }));*/
         response.send(JSON.stringify({
           "response_type": "in_channel",
           "text": result
