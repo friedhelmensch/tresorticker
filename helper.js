@@ -1,6 +1,5 @@
-module.exports = function (menu, today)
+exports.extract = function (menu, today)
 {
-  console.log(today);
     var result = "Heute beim Tresor: \n";
     menu.reduce((initvalue, currentValue, i, array) => {
       if (currentValue === today) {
@@ -14,3 +13,15 @@ module.exports = function (menu, today)
     }, 1);
     return result;
 }
+
+exports.getToday = function (todayAsNumber)
+{
+  var today = "Sonntag";
+  if (todayAsNumber === 1) today = "Montag";
+  if (todayAsNumber === 2) today = "Dienstag";
+  if (todayAsNumber === 3) today = "Mittwoch";
+  if (todayAsNumber === 4) today = "Donnerstag";
+  if (todayAsNumber === 5) today = "Freitag";
+  return today;
+}
+

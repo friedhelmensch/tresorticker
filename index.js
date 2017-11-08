@@ -3,7 +3,7 @@ PDFParser = require("pdf2json");
 var http = require('http');
 var express = require('express');
 var app = express();
-const extractString = require('./extractString');
+const helper = require('./helper');
 
 app.set('port', (process.env.PORT || 5000))
 app.use(express.static(__dirname + '/public'))
@@ -28,15 +28,9 @@ app.post('/', function (request, response) {
           }
         }, this);
 
-        var todayAsNumber = new Date().getDay();
-        var today = "Sonntag";
-        if (todayAsNumber === 1) today = "Montag";
-        if (todayAsNumber === 2) today = "Dienstag";
-        if (todayAsNumber === 3) today = "Mittwoch";
-        if (todayAsNumber === 4) today = "Donnerstag";
-        if (todayAsNumber === 5) today = "Freitag";
-
-        var result = extractString(menu, today) + "!!";
+        var today = helper.getToday(new Date().getDay());
+        var result = helper.extract(menu, today);
+        
         response.setHeader('Content-Type', 'application/json');
         response.send(JSON.stringify({
           "response_type": "in_channel",
