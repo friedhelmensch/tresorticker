@@ -14,14 +14,26 @@ exports.extract = function (menu, today)
     return result;
 }
 
-exports.getToday = function (todayAsNumber)
+exports.getDay = function (dayAsNumber)
 {
-  var today = "Sonntag";
-  if (todayAsNumber === 1) today = "Montag";
-  if (todayAsNumber === 2) today = "Dienstag";
-  if (todayAsNumber === 3) today = "Mittwoch";
-  if (todayAsNumber === 4) today = "Donnerstag";
-  if (todayAsNumber === 5) today = "Freitag";
-  return today;
+  var day = "Sonntag";
+  if (dayAsNumber === 1) day = "Montag";
+  if (dayAsNumber === 2) day = "Dienstag";
+  if (dayAsNumber === 3) day = "Mittwoch";
+  if (dayAsNumber === 4) day = "Donnerstag";
+  if (dayAsNumber === 5) day = "Freitag";
+  return day;
+}
+
+exports.getMenu = function (menuAsText)
+{
+  var splitted = menuAsText.split(/\n/g);
+  var menu = [];
+  splitted.forEach(function (element) {
+    if (element != " \r") {
+      menu.push(element.replace(" \r", ""));
+    }
+  });
+  return menu;
 }
 

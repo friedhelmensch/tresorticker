@@ -19,22 +19,16 @@ app.post('/', function (request, response) {
       }
       );
       pdfParser.on("pdfParser_dataReady", function (pdfData) {
-        var pdfAsText = pdfParser.getRawTextContent();
-        var splitted = pdfAsText.split(/\n/g);
-        var menu = [];
-        splitted.forEach(function (element) {
-          if (element != " \r") {
-            menu.push(element.replace(" \r", ""));
-          }
-        }, this);
 
-        var today = helper.getToday(new Date().getDay());
-        var result = helper.extract(menu, today);
-        
+        var pdfAsText = pdfParser.getRawTextContent();
+        var menu = helper.getMenu(pdfAsText);
+        var today = helper.getDay(new Date().getDay());
+        var todaysMeals = helper.extract(menu, today);
+
         response.setHeader('Content-Type', 'application/json');
         response.send(JSON.stringify({
           "response_type": "in_channel",
-          "text": result
+          "text": todaysMeals
         }));
       });
       pdfParser.loadPDF("./WochenKarte2.pdf");

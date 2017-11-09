@@ -7,10 +7,10 @@ it('helper.extract', () => {
   expect(helper.extract([], "Montag")).to.contain("Heute");
 })
 
-it('helper.today montag', () => {
-  expect(helper.getToday(1)).to.contain("Montag");
+it('helper.getDay montag', () => {
+  expect(helper.getDay(1)).to.contain("Montag");
 })
 
-it('helper.today donnerstag', () => {
-  expect(helper.getToday(4)).to.contain("Donnerstag");
+it('helper.getDay donnerstag', () => {
+  expect(helper.getDay(4)).to.contain("Donnerstag");
 })
