@@ -8,7 +8,7 @@ Make sure you have [Node.js](http://nodejs.org/) and the [Heroku Toolbelt](https
 
 ```sh
 git clone https://github.com/friedhelmensch/tresorticker.git # or clone your own fork
-cd node-js-sample
+cd tresorticker
 npm install
 npm start
 ```
