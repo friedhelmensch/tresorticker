@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "express": "^4.13.3",
+    "node-fetch": "^1.7.3",
     "pdf2json": "^1.1.7"
   },
   "engines": {
