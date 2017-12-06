@@ -2,15 +2,29 @@ const fetch = require("node-fetch");
 var express = require('express');
 var app = express();
 const helper = require('./helper');
-const executer = require('./executer');
+const menuProvider = require('./menuProvider');
 
 app.set('port', (process.env.PORT || 5000))
 app.use(express.static(__dirname + '/public'))
 
-app.post('/', function (request, response) {
-  
-  executer.execute(fetch, response, helper);
+app.post('/', async function (request, response) {
 
+  response.setHeader('Content-Type', 'application/json');
+
+  try {
+    var todaysMeals = await menuProvider.getTodaysMeals(fetch, helper);
+
+    response.send(JSON.stringify({
+      "response_type": "in_channel",
+      "text": todaysMeals
+    }));
+
+  } catch (e) {
+    response.send(JSON.stringify({
+      "response_type": "ephemeral",
+      "text": "something went wrong: " + e.message
+    }));
+  }
 })
 
 app.listen(app.get('port'), function () {
