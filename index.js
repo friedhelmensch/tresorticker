@@ -14,16 +14,16 @@ app.post('/', async function (request, response) {
   try {
     var todaysMeals = await menuProvider.getTodaysMeals(fetch, helper);
 
-    response.send(JSON.stringify({
-      "response_type": "in_channel",
-      "text": todaysMeals
-    }));
+    response.send({
+      response_type: "in_channel",
+      text: todaysMeals
+    });
 
   } catch (e) {
-    response.send(JSON.stringify({
-      "response_type": "ephemeral",
-      "text": "something went wrong: " + e.message
-    }));
+    response.send({
+      response_type: "ephemeral",
+      text: "something went wrong: " + e.message
+    });
   }
 })
 
