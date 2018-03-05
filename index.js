@@ -12,11 +12,14 @@ app.post('/', async function (request, response) {
   response.setHeader('Content-Type', 'application/json');
 
   try {
-    var todaysMeals = await menuProvider.getTodaysMeals(fetch, helper);
+    const todaysMeals = await menuProvider.getTodaysMeals(fetch, helper);
+    
+    let message = "Heute beim Tresor: \n\n";
+    todaysMeals.map(x => x.meals.map(m => message += m.meal + ' € ' + m.priceInEUR.replace('.', ',') + '\n'))
 
     response.send({
       response_type: "in_channel",
-      text: todaysMeals
+      text: message
     });
 
   } catch (e) {
