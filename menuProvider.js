@@ -1,18 +1,17 @@
 PDFParser = require("pdf2json");
+const LocalDate = require('js-joda').LocalDate;
 
-exports.getTodaysMeals = async function (fetch, helper) {
+exports.getTodaysMeals = async function (fetch) {
     const menuResponse = await fetch("http://www.restaurant-tresor.de/index_htm_files/Wochenkarte.pdf");
     const menuBuffer = await menuResponse.buffer();
     const pdfAsText = await getPdfAsText(menuBuffer);
-    const todaysMeals = exports.getMenuByDay(new Date(), pdfAsText, helper);
+    const todaysMeals = exports.getMenuByDay(LocalDate.now(), pdfAsText);
     return todaysMeals;
 }
 
-exports.getMenuByDay = function (date, textMenu, helper) {
+exports.getMenuByDay = function (date, textMenu) {
     const weekleMenu = exports.getMenu(textMenu);
-
-    const today = helper.getDay(date.getDay());
-    const todaysMenu = weekleMenu.filter(f => f.day == today | f.day == 'Täglich')
+    const todaysMenu = weekleMenu.filter(f => f.day == date.toString() | f.day == 'Täglich')
     return todaysMenu;
 }
 
@@ -29,6 +28,17 @@ exports.getMenu = function (textMenu) {
     
     const menuSeperators = allSeperators.slice(1)
 
+    const weekRangeRegEx = /\d{1,2}. (Januar?|Februar?|März?|April?|Mai|Juni?|Juli?|August?|September?|Oktober?|November?|Dezember?) bis/g
+    const monthNames = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+    const dayAndMonth = mealsText
+      .match(weekRangeRegEx)[0]
+      .replace('bis', '')
+      .replace(' ', '')
+      .trim()
+      .split('.')
+
+    const startDay = LocalDate.of(new Date().getFullYear(), monthNames.indexOf(dayAndMonth[1].trim()) + 1, dayAndMonth[0])
+
     const weeklyMenu = menuSeperators.reduce((menu, current, idx) => {
         const sectionMenu = menuSections[idx].trim()
             .split(/(\r\n|\n|\r)/gm)
@@ -41,7 +51,8 @@ exports.getMenu = function (textMenu) {
                 }
             })
 
-        menu.push({'day': current, 'meals':sectionMenu})
+        const day = current !== 'Täglich' ? startDay.plusDays(idx).toString() : 'Täglich'
+        menu.push({'day': day, 'meals':sectionMenu})
 
         return menu;
     }, []);
