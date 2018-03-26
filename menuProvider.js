@@ -43,12 +43,15 @@ exports.getMenu = function (textMenu) {
         const sectionMenu = menuSections[idx].trim()
             .split(/(\r\n|\n|\r)/gm)
             .filter(r => r !== '\r\n')
+            .filter(r => r !== '\n')
             .map(m => {
                 const menuPriceMap = m.split('€')
-                return {
-                    "meal": menuPriceMap[0].trim(),
-                    "priceInEUR": parseFloat(menuPriceMap[1].replace(/,/, '.')).toFixed(2)
+                let menuText = m;
+                if(menuPriceMap[0] !== undefined && menuPriceMap[1] !== undefined) {
+                    menuText = menuPriceMap[0].trim() + ' € ' + parseFloat(menuPriceMap[1].replace(/,/, '.')).toFixed(2).replace('.',',');
                 }
+
+                return menuText;
             })
 
         const day = current !== 'Täglich' ? startDay.plusDays(idx).toString() : 'Täglich'
