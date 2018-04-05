@@ -78,6 +78,33 @@ it('GetMenu should return daily special as well as all week daily dishes', () =>
   expect(todaysMenu).to.deep.equal(expectedDailyMenu);
 })
 
+it('When menus week range is not complete get menu should return the right menu based on the remaining dates', () => {
+  const fs = require('fs')
+  const LocalDate = require('js-joda').LocalDate;
+
+  const menuText = fs.readFileSync('./test/Wochenkarte.DateRange.content.txt', 'utf8').replace(/(\r\n |\n |\r )/gm, "")
+  const todaysMenu = menuProvider.getMenuByDay(LocalDate.of(2018, 4, 5), menuText)
+
+  const expectedDailyMenu = [{
+      "day": "2018-04-05",
+      "meals": [
+        "Putenrollbraten mit Spätzle € 7,50"
+      ]
+    },
+    {
+      "day": "Täglich",
+      "meals": [
+        "Salatteller mit Räucherlachs 7,80"
+        ,"Penne Arrabiata mit Fetakäse € 7,20"
+        ,"Rehbraten mit Kartoffelknödel und Wirsingrahm € 15,50"
+      ]
+    }
+  ]
+
+  expect(todaysMenu).to.deep.equal(expectedDailyMenu);
+})
+
+
 it('GetMenu should in weeks with holidays', () => {
   const fs = require('fs')
   const LocalDate = require('js-joda').LocalDate;

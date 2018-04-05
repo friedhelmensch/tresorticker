@@ -26,7 +26,7 @@ exports.getMenu = function (textMenu) {
 
     const menuSections = mealsText.split(new RegExp(allSeperators.join('|'), 'g')).slice(1)
     
-    const menuSeperators = allSeperators.slice(1)
+    const menuSectionByDay = allSeperators.slice(1)
 
     const weekRangeRegEx = /\d{1,2}. (Januar?|Februar?|März?|April?|Mai|Juni?|Juli?|August?|September?|Oktober?|November?|Dezember?) bis/g
     const monthNames = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
@@ -37,9 +37,10 @@ exports.getMenu = function (textMenu) {
       .trim()
       .split('.')
 
-    const startDay = LocalDate.of(new Date().getFullYear(), monthNames.indexOf(dayAndMonth[1].trim()) + 1, dayAndMonth[0])
+    const firstDayInMenu = LocalDate.of(new Date().getFullYear(), monthNames.indexOf(dayAndMonth[1].trim()) + 1, dayAndMonth[0]);
+    const firstDayOfMenuWeek = firstDayInMenu.minusDays(firstDayInMenu.dayOfWeek().ordinal());
 
-    const weeklyMenu = menuSeperators.reduce((menu, current, idx) => {
+    const weeklyMenu = menuSectionByDay.reduce((menu, current, idx) => {
         const sectionMenu = menuSections[idx].trim()
             .split(/(\r\n|\n|\r)/gm)
             .filter(r => r !== '\r\n')
@@ -54,7 +55,7 @@ exports.getMenu = function (textMenu) {
                 return menuText;
             })
 
-        const day = current !== 'Täglich' ? startDay.plusDays(idx).toString() : 'Täglich'
+        const day = current !== 'Täglich' ? firstDayOfMenuWeek.plusDays(idx).toString() : 'Täglich'
         menu.push({'day': day, 'meals':sectionMenu})
 
         return menu;
