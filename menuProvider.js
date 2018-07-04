@@ -15,7 +15,21 @@ exports.getMenuByDay = function (date, textMenu) {
     return todaysMenu;
 }
 
+exports.getDayAndMonth = function (mealsText) {
+    const weekRangeRegEx = /\d{1,2}.(| )(Januar?|Februar?|März?|April?|Mai|Juni?|Juli?|August?|September?|Oktober?|November?|Dezember?) bis/g
+
+    const dayAndMonth = mealsText
+        .match(weekRangeRegEx)[0]
+        .replace('bis', '')
+        .replace(' ', '')
+        .trim()
+        .split('.')
+
+    return dayAndMonth;
+}
+
 exports.getMenu = function (textMenu) {
+
     const mealsText = textMenu
         .replace(/(\r\n |\n |\r )/gm, '')
         .replace('Wochenkarte', '')
@@ -25,17 +39,12 @@ exports.getMenu = function (textMenu) {
     const allSeperators = ['Wochenkarte', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Täglich']
 
     const menuSections = mealsText.split(new RegExp(allSeperators.join('|'), 'g')).slice(1)
-    
+
     const menuSectionByDay = allSeperators.slice(1)
 
-    const weekRangeRegEx = /\d{1,2}. (Januar?|Februar?|März?|April?|Mai|Juni?|Juli?|August?|September?|Oktober?|November?|Dezember?) bis/g
+    const dayAndMonth = exports.getDayAndMonth(mealsText);
+
     const monthNames = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
-    const dayAndMonth = mealsText
-      .match(weekRangeRegEx)[0]
-      .replace('bis', '')
-      .replace(' ', '')
-      .trim()
-      .split('.')
 
     const firstDayInMenu = LocalDate.of(new Date().getFullYear(), monthNames.indexOf(dayAndMonth[1].trim()) + 1, dayAndMonth[0]);
     const firstDayOfMenuWeek = firstDayInMenu.minusDays(firstDayInMenu.dayOfWeek().ordinal());
@@ -48,15 +57,15 @@ exports.getMenu = function (textMenu) {
             .map(m => {
                 const menuPriceMap = m.split('€')
                 let menuText = m;
-                if(menuPriceMap[0] !== undefined && menuPriceMap[1] !== undefined) {
-                    menuText = menuPriceMap[0].trim() + ' € ' + parseFloat(menuPriceMap[1].replace(/,/, '.')).toFixed(2).replace('.',',');
+                if (menuPriceMap[0] !== undefined && menuPriceMap[1] !== undefined) {
+                    menuText = menuPriceMap[0].trim() + ' € ' + parseFloat(menuPriceMap[1].replace(/,/, '.')).toFixed(2).replace('.', ',');
                 }
 
                 return menuText;
             })
 
         const day = current !== 'Täglich' ? firstDayOfMenuWeek.plusDays(idx).toString() : 'Täglich'
-        menu.push({'day': day, 'meals':sectionMenu})
+        menu.push({ 'day': day, 'meals': sectionMenu })
 
         return menu;
     }, []);
