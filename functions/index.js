@@ -8,7 +8,7 @@ exports.tresorMenu = functions.https.onRequest(async (request, response) => {
         const todaysMeals = await menuProvider.getTodaysMeals(fetch);
 
         //Slack formatting
-        let message = "Heute beim Tresor: \n\n";
+        let message = "Heute beim Tresori: \n\n";
         todaysMeals.map(x => x.meals.map(m => message += m + '\n'))
         
         //Microsoft Teams formatting
