@@ -7,7 +7,7 @@ it('Parsing the text representation of Wochenkarte should create menu', () => {
   const fs = require('fs')
 
   const menuText = fs.readFileSync('./test/Wochenkarte.content.txt', 'utf8').replace(/(\r\n |\n |\r )/gm, "")
-  const menu = menuProvider.getMenu(menuText)
+  const menu = menuProvider.getMenu(menuText, 2018)
 
   const expectedMenu = [{
       "day": "2018-02-26",
@@ -140,7 +140,7 @@ it('Extracting start date of weekly menu should return 26.02.2018', () => {
   const dayAndMonth =  menuProvider.getDayAndMonth(menuText);
   const monthNames = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 
-  const startDate = LocalDate.of(new Date().getFullYear(), monthNames.indexOf(dayAndMonth[1].trim()) + 1, dayAndMonth[0])
+  const startDate = LocalDate.of(2018, monthNames.indexOf(dayAndMonth[1].trim()) + 1, dayAndMonth[0])
   const expectedStartDate = LocalDate.of(2018, 2, 26)
 
   expect(expectedStartDate).to.deep.equal(startDate);
@@ -156,7 +156,7 @@ it('Extracting start date of weekly menu should return 02.07.2018 (NoSpaceInDate
 
   const monthNames = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 
-  const startDate = LocalDate.of(new Date().getFullYear(), monthNames.indexOf(dayAndMonth[1].trim()) + 1, dayAndMonth[0])
+  const startDate = LocalDate.of(2018, monthNames.indexOf(dayAndMonth[1].trim()) + 1, dayAndMonth[0])
   const expectedStartDate = LocalDate.of(2018, 7, 2)
 
   expect(expectedStartDate).to.deep.equal(startDate);

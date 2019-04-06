@@ -1,4 +1,4 @@
-PDFParser = require("pdf2json");
+const PDFParser = require("pdf2json");
 const LocalDate = require('js-joda').LocalDate;
 
 exports.getTodaysMeals = async function (fetch) {
@@ -10,7 +10,7 @@ exports.getTodaysMeals = async function (fetch) {
 }
 
 exports.getMenuByDay = function (date, textMenu) {
-    const weekleMenu = exports.getMenu(textMenu);
+    const weekleMenu = exports.getMenu(textMenu, date.year());
     const todaysMenu = weekleMenu.filter(f => f.day == date.toString() | f.day == 'Täglich')
     return todaysMenu;
 }
@@ -28,7 +28,10 @@ exports.getDayAndMonth = function (mealsText) {
     return dayAndMonth;
 }
 
-exports.getMenu = function (textMenu) {
+exports.getMenu = function (textMenu, year) {
+
+    //tests provide year because test data is static
+    if(!year) year = new Date().getFullYear();
 
     const mealsText = textMenu
         .replace(/(\r\n |\n |\r )/gm, '')
@@ -46,7 +49,7 @@ exports.getMenu = function (textMenu) {
 
     const monthNames = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 
-    const firstDayInMenu = LocalDate.of(new Date().getFullYear(), monthNames.indexOf(dayAndMonth[1].trim()) + 1, dayAndMonth[0]);
+    const firstDayInMenu = LocalDate.of(year, monthNames.indexOf(dayAndMonth[1].trim()) + 1, dayAndMonth[0]);
     const firstDayOfMenuWeek = firstDayInMenu.minusDays(firstDayInMenu.dayOfWeek().ordinal());
 
     const weeklyMenu = menuSectionByDay.reduce((menu, current, idx) => {
