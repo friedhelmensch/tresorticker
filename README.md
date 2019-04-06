@@ -1,29 +1,14 @@
 # Tresorticker
 
-A barebones Node.js app using [Express 4](http://expressjs.com/) to parse the PDF Menu into a readable string so it can be read from an slack integration
+An application to parse the PDF Menu into a readable string so it can be read from a Microsoft Teams integration
 
 ## Running Locally
 
-Make sure you have [Node.js](http://nodejs.org/) and the [Heroku Toolbelt](https://toolbelt.heroku.com/) installed.
+Install [Firebase CLI](https://firebase.google.com/docs/cli/)
 
 ```sh
 git clone https://github.com/friedhelmensch/tresorticker.git # or clone your own fork
-cd tresorticker
+cd tresorticker/functions
 npm install
-npm start
+npm run serve
 ```
-
-Your app should now be running on [localhost:5000](http://localhost:5000/).
-
-## Deploying to Heroku
-
-```
-heroku create
-git push heroku master
-heroku open
-```
-
-Alternatively, you can deploy your own copy of the app using the web-based flow:
-
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-
