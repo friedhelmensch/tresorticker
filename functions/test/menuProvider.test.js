@@ -1,6 +1,6 @@
 'use strict'
 
-const menuProvider = require('../menuProvider');
+const menuProvider = require("../lib/menuProvider");
 const expect = require('chai').expect
 
 it('Parsing the text representation of Wochenkarte should create menu', () => {

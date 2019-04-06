@@ -11,7 +11,7 @@ exports.getTodaysMeals = async function (fetch) {
 
 exports.getMenuByDay = function (date, textMenu) {
     const weekleMenu = exports.getMenu(textMenu, date.year());
-    const todaysMenu = weekleMenu.filter(f => f.day == date.toString() | f.day == 'Täglich')
+    const todaysMenu = weekleMenu.filter(f => f.day === date.toString() | f.day === 'Täglich')
     return todaysMenu;
 }
 
@@ -31,7 +31,7 @@ exports.getDayAndMonth = function (mealsText) {
 exports.getMenu = function (textMenu, year) {
 
     //tests provide year because test data is static
-    if(!year) year = new Date().getFullYear();
+    if (!year) year = new Date().getFullYear();
 
     const mealsText = textMenu
         .replace(/(\r\n |\n |\r )/gm, '')
@@ -80,11 +80,11 @@ getPdfAsText = async function (menuBuffer) {
 
     return new Promise(function (resolve, reject) {
         var pdfParser = new PDFParser(this, 1);
-        pdfParser.on("pdfParser_dataError", function (errData) {
+        pdfParser.on("pdfParser_dataError", (errData) => {
             reject(errData);
         });
 
-        pdfParser.on("pdfParser_dataReady", function (pdfData) {
+        pdfParser.on("pdfParser_dataReady", (pdfData) => {
             var pdfAsText = pdfParser.getRawTextContent();
             resolve(pdfAsText);
         });
