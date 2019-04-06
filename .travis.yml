@@ -4,7 +4,7 @@ node_js:
 install:
 - cd functions && yarn install && cd ..
 script:
-- cd functions && yarn test && cd ..
+- cd functions && yarn lint && yarn test && cd ..
 deploy:
   provider: firebase
   token:
