@@ -17,7 +17,7 @@ exports.tresorMenu = functions.https.onRequest(async (request, response) => {
 
         response.send({
             type: "message",
-            text: message
+            text: "<strike>" + message + "</strike>"
         });
 
     } catch (e) {
