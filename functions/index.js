@@ -21,53 +21,9 @@ exports.tresorMenu = functions.https.onRequest(async (request, response) => {
         const closingListTag = "</ul>";
         const message = openingListTag + mealsAsListEntries + closingListTag;
 
-        const test = {
-            contentType: "application/vnd.microsoft.teams.card.o365connector",
-            content: {
-                "@type": "MessageCard",
-                "@context": "http://schema.org/extensions",
-                summary: "Summary",
-                title: "Connector Card Markdown formatting",
-                sections: [
-                    {
-                        text: "This is some **bold** text"
-                    },
-                    {
-                        text: "This is some _italic_ text"
-                    },
-                    {
-                        text: "# Header 1\r## Header 2\r### Header 3"
-                    },
-                    {
-                        text: "- Bullet \r- List \r"
-                    },
-                    {
-                        text: "1. Numbered\r1. List \r"
-                    },
-                    {
-                        text: "Link: [Bing](https://www.bing.com)"
-                    },
-                    {
-                        text:
-                            "embedded image link: ![Duck on a rock](http://aka.ms/Fo983c)"
-                    },
-                    {
-                        text: "`preformatted text`"
-                    },
-                    {
-                        text:
-                            "Newlines (backslash n, backslash n):\n\nline a\n\nline b\n\nline c"
-                    },
-                    {
-                        text: ">This is a blockquote"
-                    }
-                ]
-            }
-        };
-
         response.send({
             type: "message",
-            text: test
+            text: message
         });
     } catch (e) {
         console.log("Error fetching Tresor's weekly menu: " + e.message);
