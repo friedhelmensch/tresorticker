@@ -6,18 +6,22 @@ exports.tresorMenu = functions.https.onRequest(async (request, response) => {
     try {
         const todaysMeals = await menuProvider.getTodaysMeals(fetch);
 
-        const header = "<h3>Heute beim Tresor: </h3>";
-        const openingTable = "<ul>";
+        const header = "<h1>Heute beim Tresor: </h1>";
+        const openingListTag = "<ul>";
+
         const allMeals = todaysMeals.map(x => x.meals.map(meal => meal));
         const flatMeals = allMeals.reduce(
             (prev, curr) => prev.concat(curr),
             []
         );
-        
-        const meals = flatMeals.reduce((prev, curr) => prev += "<li>" + curr + "</li>", "");
+        const mealsAsListEntries = flatMeals.reduce(
+            (prev, curr) => (prev += "<li>" + curr + "</li>"),
+            ""
+        );
 
-        const closingTable = "</ul>";
-        const message = header + openingTable + meals + closingTable;
+        const closingListTag = "</ul>";
+        const message =
+            header + openingListTag + mealsAsListEntries + closingListTag;
 
         response.send({
             type: "message",
