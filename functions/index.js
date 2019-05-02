@@ -1,31 +1,34 @@
-const functions = require('firebase-functions');
+const functions = require("firebase-functions");
 const menuProvider = require("./lib/menuProvider");
 const fetch = require("node-fetch");
 
 exports.tresorMenu = functions.https.onRequest(async (request, response) => {
-
     try {
         const todaysMeals = await menuProvider.getTodaysMeals(fetch);
 
-        //Slack formatting
-        let message = "Heute beim Tresor: \n\n";
-        todaysMeals.map(x => x.meals.map(m => message += m + '\n'))
+        const header = "<h3>Heute beim Tresor: </h3>";
+        const openingTable = "<ul>";
+        const allMeals = todaysMeals.map(x => x.meals.map(meal => meal));
+        const flatMeals = allMeals.reduce(
+            (prev, curr) => prev.concat(curr),
+            []
+        );
         
-        //Microsoft Teams formatting
-        //TODO: find out how Cards have to be formatted and how the response needs to look like 
-        //in order for teams to properly show the menu
+        const meals = flatMeals.reduce((prev, curr) => prev += "<li>" + curr + "</li>", "");
+
+        const closingTable = "</ul>";
+        const message = header + openingTable + meals + closingTable;
 
         response.send({
             type: "message",
-            text: "<strike>" + message + "</strike>"
+            text: message
         });
-
     } catch (e) {
-        console.log("Error fetching Tresor's weekly menu: " + e.message)
+        console.log("Error fetching Tresor's weekly menu: " + e.message);
         response.send({
             type: "message",
-            text: "Uups - da ging wat schief! Hier geht's zur Online Karte: http://www.restaurant-tresor.de/ "
+            text:
+                "Uups - da ging wat schief! Hier geht's zur Online Karte: http://www.restaurant-tresor.de/ "
         });
     }
-
 });
