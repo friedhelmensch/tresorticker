@@ -6,7 +6,6 @@ exports.tresorMenu = functions.https.onRequest(async (request, response) => {
     try {
         const todaysMeals = await menuProvider.getTodaysMeals(fetch);
 
-        const header = "<h1>Heute beim Tresor: </h1>";
         const openingListTag = "<ul>";
 
         const allMeals = todaysMeals.map(x => x.meals.map(meal => meal));
@@ -20,8 +19,7 @@ exports.tresorMenu = functions.https.onRequest(async (request, response) => {
         );
 
         const closingListTag = "</ul>";
-        const message =
-            header + openingListTag + mealsAsListEntries + closingListTag;
+        const message = openingListTag + mealsAsListEntries + closingListTag;
 
         response.send({
             type: "message",
