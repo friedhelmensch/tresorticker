@@ -30,7 +30,7 @@ exports.tresorMenu = functions.https.onRequest(async (request, response) => {
         response.send({
             type: "message",
             text:
-                "Uups - da ging wat schief! Hier geht's zur Online Karte: http://www.restaurant-tresor.de/ "
+                "<ul><li>currently under maintenance. Please use:</li><li>http://www.restaurant-tresor.de/index_htm_files/Speisekarte%20Restaurant%20am%20Golfpark.pdf</li></ul>"
         });
     }
 });
